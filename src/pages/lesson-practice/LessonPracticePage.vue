@@ -198,13 +198,10 @@ onBeforeUnmount(() => {
     <div class="flex items-center justify-between gap-4">
       <RouterLink
         to="/"
-        class="btn btn-ghost btn-sm px-0 text-base-content/70 hover:bg-transparent hover:text-base-content"
+        class="btn btn-ghost btn-sm"
       >
         Back
       </RouterLink>
-      <p class="text-sm font-medium uppercase tracking-[0.18em] text-base-content/50">
-        {{ lessonId }}
-      </p>
     </div>
 
     <div
@@ -223,20 +220,20 @@ onBeforeUnmount(() => {
 
     <div
       v-else-if="currentExercise"
-      class="mt-10 space-y-10"
+      class="mt-10 space-y-8"
     >
-      <div class="space-y-4">
-        <p class="text-sm font-medium uppercase tracking-[0.18em] text-base-content/55">
+      <section class="space-y-3">
+        <p class="badge badge-ghost">
           English
         </p>
-        <p class="text-2xl font-medium leading-tight text-base-content sm:text-3xl">
+        <p class="text-2xl sm:text-3xl">
           {{ englishText }}
         </p>
         <p
           v-if="englishCreditTokens.length > 0"
-          class="text-xs leading-5 text-base-content/45"
+          class="text-sm text-base-content/70"
         >
-          <span class="mr-1 uppercase tracking-[0.14em]">Source</span>
+          Source:
           <template
             v-for="(token, index) in englishCreditTokens"
             :key="`eng-credit-${index}`"
@@ -244,7 +241,7 @@ onBeforeUnmount(() => {
             <a
               v-if="token.type === 'link'"
               :href="token.href"
-              class="underline decoration-base-content/25 underline-offset-2 hover:decoration-base-content/60"
+              class="link link-hover"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -253,18 +250,16 @@ onBeforeUnmount(() => {
             <span v-else>{{ token.text }}</span>
           </template>
         </p>
-      </div>
+      </section>
 
-      <div class="space-y-4">
-        <p class="text-sm font-medium uppercase tracking-[0.18em] text-base-content/55">
+      <section class="space-y-3">
+        <p class="badge badge-ghost">
           German
         </p>
-        <p class="text-4xl font-semibold leading-tight tracking-tight text-base-content sm:text-5xl">
+        <p class="text-3xl font-semibold sm:text-4xl">
           <template v-if="revealedAnswer">
             {{ sentenceParts.before }}
-            <span
-              class="pulse-answer rounded-box bg-warning/20 px-2 py-1 text-warning-content shadow-sm"
-            >
+            <span class="rounded-box bg-warning px-1 text-warning-content">
               {{ revealedAnswer }}
             </span>
             {{ sentenceParts.after }}
@@ -275,9 +270,9 @@ onBeforeUnmount(() => {
         </p>
         <p
           v-if="germanCreditTokens.length > 0"
-          class="text-xs leading-5 text-base-content/45"
+          class="text-sm text-base-content/70"
         >
-          <span class="mr-1 uppercase tracking-[0.14em]">Source</span>
+          Source:
           <template
             v-for="(token, index) in germanCreditTokens"
             :key="`deu-credit-${index}`"
@@ -285,7 +280,7 @@ onBeforeUnmount(() => {
             <a
               v-if="token.type === 'link'"
               :href="token.href"
-              class="underline decoration-base-content/25 underline-offset-2 hover:decoration-base-content/60"
+              class="link link-hover"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -294,14 +289,14 @@ onBeforeUnmount(() => {
             <span v-else>{{ token.text }}</span>
           </template>
         </p>
-      </div>
+      </section>
 
       <div class="grid gap-3 sm:grid-cols-2">
         <button
           v-for="answer in displayedAnswers"
           :key="answer"
           type="button"
-          class="btn btn-lg h-16 rounded-box text-lg font-semibold normal-case"
+          class="btn btn-lg min-h-16 text-lg"
           :class="revealedAnswer === answer ? 'btn-success' : 'btn-neutral'"
           :disabled="disabledAnswers.includes(answer) || revealedAnswer.length > 0"
           @click="handleAnswer(answer)"

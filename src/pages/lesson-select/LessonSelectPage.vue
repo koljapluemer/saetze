@@ -28,7 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-3xl flex-col px-5 py-8 sm:px-8 sm:py-10">
+  <main class="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-5 py-8 sm:px-8 sm:py-10">
     <div class="space-y-2">
       <p class="text-sm font-medium uppercase tracking-[0.18em] text-base-content/55">
         German
@@ -54,17 +54,19 @@ onMounted(() => {
 
     <div
       v-else
-      class="mt-10 space-y-3"
+      class="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
     >
       <RouterLink
         v-for="[lessonId, lesson] in lessons"
         :key="lessonId"
         :to="`/lessons/${lessonId}`"
-        class="btn btn-lg h-auto justify-start rounded-box border-base-300 bg-base-100 px-5 py-4 text-left normal-case shadow-sm hover:-translate-y-0.5 hover:border-base-content/15 hover:bg-base-100"
+        class="card card-border bg-base-100 shadow-sm transition-shadow hover:shadow-md"
       >
-        <span class="block text-base font-semibold text-base-content">
-          {{ lesson }}
-        </span>
+        <div class="card-body p-5">
+          <h2 class="card-title text-base">
+            {{ lesson }}
+          </h2>
+        </div>
       </RouterLink>
     </div>
   </main>
