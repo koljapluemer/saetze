@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+:root {
+  color-scheme: light;
+  font-family: "Avenir Next", "Segoe UI Variable", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(251, 214, 123, 0.45), transparent 34%),
+    linear-gradient(180deg, #fff8ed 0%, #fffdf7 40%, #f8f4ec 100%);
+}
+
+html,
+body,
+#app {
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  color: #2d2a26;
+  background:
+    radial-gradient(circle at top left, rgba(255, 211, 118, 0.28), transparent 28%),
+    linear-gradient(180deg, #fffaf0 0%, #fffdf8 38%, #f6f1e6 100%);
+}
+
+button,
+a {
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+button:active,
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.route-fade-enter-active,
+.route-fade-leave-active,
+.swap-rise-enter-active,
+.swap-rise-leave-active {
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.route-fade-enter-from,
+.route-fade-leave-to,
+.swap-rise-enter-from,
+.swap-rise-leave-to {
+  opacity: 0;
+}
+
+.route-fade-enter-from,
+.swap-rise-enter-from {
+  transform: translateY(14px);
+}
+
+.route-fade-leave-to,
+.swap-rise-leave-to {
+  transform: translateY(-10px);
+}
+
+.pulse-answer {
+  animation: pulse-answer 360ms ease;
+}
+
+@keyframes pulse-answer {
+  0% {
+    transform: scale(0.96);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
