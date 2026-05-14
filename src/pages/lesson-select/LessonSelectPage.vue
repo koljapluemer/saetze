@@ -3,9 +3,8 @@ import { onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { fetchLessonIndex } from '@/entities/lesson-data/api'
-import type { LessonIndex } from '@/entities/lesson-data/model'
 
-const lessons = ref<[string, LessonIndex[string]][]>([])
+const lessons = ref<[string, string][]>([])
 const isLoading = ref(true)
 const loadError = ref('')
 
@@ -64,7 +63,7 @@ onMounted(() => {
         class="btn btn-lg h-auto justify-start rounded-box border-base-300 bg-base-100 px-5 py-4 text-left normal-case shadow-sm hover:-translate-y-0.5 hover:border-base-content/15 hover:bg-base-100"
       >
         <span class="block text-base font-semibold text-base-content">
-          {{ lesson.name }}
+          {{ lesson }}
         </span>
       </RouterLink>
     </div>

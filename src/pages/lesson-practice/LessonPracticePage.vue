@@ -3,7 +3,22 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { fetchLessonExercises } from '@/entities/lesson-data/api'
-import type { LessonExercise } from '@/entities/lesson-data/model'
+import {
+  getLessonSentenceCredit,
+  getLessonSentenceText,
+  type LessonExercise,
+} from '@/entities/lesson-data/model'
+
+type CreditToken =
+  | {
+      type: 'link'
+      href: string
+      text: string
+    }
+  | {
+      type: 'text'
+      text: string
+    }
 
 const route = useRoute()
 
@@ -18,6 +33,18 @@ const loadError = ref('')
 let advanceTimeoutId: number | null = null
 
 const lessonId = computed(() => String(route.params.lessonId ?? ''))
+
+const englishText = computed(() =>
+  currentExercise.value ? getLessonSentenceText(currentExercise.value.eng) : '',
+)
+
+const englishCreditTokens = computed(() =>
+  tokenizeCredit(currentExercise.value ? getLessonSentenceCredit(currentExercise.value.eng) : ''),
+)
+
+const germanCreditTokens = computed(() =>
+  tokenizeCredit(currentExercise.value?.deu_credit ?? ''),
+)
 
 const sentenceParts = computed(() => {
   if (!currentExercise.value) {
@@ -48,6 +75,45 @@ function clearAdvanceTimeout() {
     window.clearTimeout(advanceTimeoutId)
     advanceTimeoutId = null
   }
+}
+
+function tokenizeCredit(markdown: string): CreditToken[] {
+  if (!markdown) {
+    return []
+  }
+
+  const tokens: CreditToken[] = []
+  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g
+  let lastIndex = 0
+
+  for (const match of markdown.matchAll(linkPattern)) {
+    const [fullMatch, text, href] = match
+    const matchIndex = match.index ?? 0
+
+    if (matchIndex > lastIndex) {
+      tokens.push({
+        text: markdown.slice(lastIndex, matchIndex),
+        type: 'text',
+      })
+    }
+
+    tokens.push({
+      href,
+      text,
+      type: 'link',
+    })
+
+    lastIndex = matchIndex + fullMatch.length
+  }
+
+  if (lastIndex < markdown.length) {
+    tokens.push({
+      text: markdown.slice(lastIndex),
+      type: 'text',
+    })
+  }
+
+  return tokens
 }
 
 function showRandomExercise() {
@@ -164,7 +230,28 @@ onBeforeUnmount(() => {
           English
         </p>
         <p class="text-2xl font-medium leading-tight text-base-content sm:text-3xl">
-          {{ currentExercise.eng }}
+          {{ englishText }}
+        </p>
+        <p
+          v-if="englishCreditTokens.length > 0"
+          class="text-xs leading-5 text-base-content/45"
+        >
+          <span class="mr-1 uppercase tracking-[0.14em]">Source</span>
+          <template
+            v-for="(token, index) in englishCreditTokens"
+            :key="`eng-credit-${index}`"
+          >
+            <a
+              v-if="token.type === 'link'"
+              :href="token.href"
+              class="underline decoration-base-content/25 underline-offset-2 hover:decoration-base-content/60"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              {{ token.text }}
+            </a>
+            <span v-else>{{ token.text }}</span>
+          </template>
         </p>
       </div>
 
@@ -184,6 +271,27 @@ onBeforeUnmount(() => {
           </template>
           <template v-else>
             {{ currentExercise.cloze }}
+          </template>
+        </p>
+        <p
+          v-if="germanCreditTokens.length > 0"
+          class="text-xs leading-5 text-base-content/45"
+        >
+          <span class="mr-1 uppercase tracking-[0.14em]">Source</span>
+          <template
+            v-for="(token, index) in germanCreditTokens"
+            :key="`deu-credit-${index}`"
+          >
+            <a
+              v-if="token.type === 'link'"
+              :href="token.href"
+              class="underline decoration-base-content/25 underline-offset-2 hover:decoration-base-content/60"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              {{ token.text }}
+            </a>
+            <span v-else>{{ token.text }}</span>
           </template>
         </p>
       </div>

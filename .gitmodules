@@ -1,0 +1,3 @@
+[submodule "public/saetze-data"]
+	path = public/saetze-data
+	url = git@github.com:koljapluemer/saetze-data.git
