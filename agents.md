@@ -6,7 +6,7 @@ WRITE WORKING FUCKING CODE, PROPERLY IMPLEMENT THINGS, DON'T LEAVE TRASH LYING A
 - tailwind + Daisy UI. Actually use daisy components. Avoid manual CSS when possible.
 - lucide icons (via the vue package)
 - vue router
-- dexie as SINGLE source of truth for data (Dexie Cloud ready)
+- dexie as SINGLE source of truth for per-user data (Dexie Cloud ready). Global data is JSON in public/
 
 ## Architecture
 
