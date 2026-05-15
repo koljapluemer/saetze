@@ -194,7 +194,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-3xl flex-col px-5 py-8 sm:px-8 sm:py-10">
+  <main class="mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 py-8 sm:px-8 sm:py-10">
     <div class="flex items-center justify-between gap-4">
       <RouterLink
         to="/"

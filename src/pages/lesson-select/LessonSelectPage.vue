@@ -28,13 +28,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-5 py-8 sm:px-8 sm:py-10">
+  <main class="mx-auto flex w-full max-w-5xl flex-1 flex-col px-5 py-8 sm:px-8 sm:py-10">
     <div class="space-y-2">
       <p class="text-sm font-medium uppercase tracking-[0.18em] text-base-content/55">
         German
       </p>
       <h1 class="text-4xl font-semibold tracking-tight text-base-content sm:text-5xl">
-        Pick a lesson
+        Pick what you want to practice
       </h1>
     </div>
 
