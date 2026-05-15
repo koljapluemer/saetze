@@ -8,6 +8,7 @@ import {
   getLessonSentenceText,
   type LessonExercise,
 } from '@/entities/lesson-data/model'
+import { trackExerciseFinished } from '@/pages/lesson-practice/tracking'
 
 type CreditToken =
   | {
@@ -29,6 +30,8 @@ const disabledAnswers = ref<string[]>([])
 const revealedAnswer = ref('')
 const isLoading = ref(true)
 const loadError = ref('')
+const currentExerciseStartedAt = ref('')
+const wrongAnswerCount = ref(0)
 
 let advanceTimeoutId: number | null = null
 
@@ -122,6 +125,8 @@ function showRandomExercise() {
     displayedAnswers.value = []
     disabledAnswers.value = []
     revealedAnswer.value = ''
+    currentExerciseStartedAt.value = ''
+    wrongAnswerCount.value = 0
     return
   }
 
@@ -131,6 +136,8 @@ function showRandomExercise() {
   displayedAnswers.value = shuffleAnswers(nextExercise.answers)
   disabledAnswers.value = []
   revealedAnswer.value = ''
+  currentExerciseStartedAt.value = new Date().toISOString()
+  wrongAnswerCount.value = 0
 }
 
 function handleAnswer(answer: string) {
@@ -142,8 +149,29 @@ function handleAnswer(answer: string) {
 
   if (answer !== correctAnswer) {
     disabledAnswers.value = [...disabledAnswers.value, answer]
+    wrongAnswerCount.value += 1
     return
   }
+
+  const timestamp = new Date().toISOString()
+  const startedAt = currentExerciseStartedAt.value || timestamp
+  const startedAtMs = new Date(startedAt).getTime()
+  const completedAtMs = new Date(timestamp).getTime()
+  const timeOnExerciseMs =
+    Number.isFinite(startedAtMs) && Number.isFinite(completedAtMs)
+      ? Math.max(0, completedAtMs - startedAtMs)
+      : 0
+
+  trackExerciseFinished({
+    completedOnFirstTry: wrongAnswerCount.value === 0,
+    correctAnswer,
+    germanCloze: currentExercise.value.cloze,
+    lessonId: lessonId.value,
+    timeOnExerciseMs,
+    timestamp,
+    wrongAnswer: currentExercise.value.answers[1],
+    nativeLanguage: 'eng'
+  })
 
   revealedAnswer.value = correctAnswer
   clearAdvanceTimeout()
@@ -162,6 +190,8 @@ async function loadLesson() {
   displayedAnswers.value = []
   disabledAnswers.value = []
   revealedAnswer.value = ''
+  currentExerciseStartedAt.value = ''
+  wrongAnswerCount.value = 0
 
   try {
     const exercises = await fetchLessonExercises(lessonId.value)
